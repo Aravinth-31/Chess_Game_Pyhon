@@ -76,24 +76,24 @@ def handleHelp(position,player):
     (x,y)=alphaNumericPosToNumericPos(position)
     #first checking whether opponents pawn can capture if player make the move
     if player==1: # logic for player 1
-        if x-1>=0 and y-1>=0 and board[x-1][y-1]=='B_PAWN':
-            chancesOfCaptures.append((numericPosToAlphanumericPos(8-x+1,y-1),"B_PAWN"))
-        if x-1>=0 and y+1<8 and board[x-1][y+1]=='B_PAWN':
-            chancesOfCaptures.append((numericPosToAlphanumericPos(8-x+1,y+1),"B_PAWN"))
+        if x-1>=0 and y-1>=0 and board[x-1][y-1]=='B_P':
+            chancesOfCaptures.append((numericPosToAlphanumericPos(8-x+1,y-1),"B_P"))
+        if x-1>=0 and y+1<8 and board[x-1][y+1]=='B_P':
+            chancesOfCaptures.append((numericPosToAlphanumericPos(8-x+1,y+1),"B_P"))
     else: # logic for player 2
-        if x+1<8 and y+1<8 and board[x+1][y+1]=='W_PAWN':
-            chancesOfCaptures.append((numericPosToAlphanumericPos(8-x-1,y+1),"W_PAWN"))
-        if x+1<8 and y-1>=0 and board[x+1][y-1]=='W_PAWN':
-            chancesOfCaptures.append((numericPosToAlphanumericPos(8-x-1,y-1),"W_PAWN"))
+        if x+1<8 and y+1<8 and board[x+1][y+1]=='W_P':
+            chancesOfCaptures.append((numericPosToAlphanumericPos(8-x-1,y+1),"W_P"))
+        if x+1<8 and y-1>=0 and board[x+1][y-1]=='W_P':
+            chancesOfCaptures.append((numericPosToAlphanumericPos(8-x-1,y-1),"W_P"))
     #storing coin at destination in temp to calculate chance of getting capture
     temp=board[x][y]
     #temporarily making destination as empty
-    board[x][y]='X'
+    board[x][y]=' '
     # calculating each opponents move to check whether any of the opponent coin can capture if player makes the move
     for i in range(8):
         for j in range(8):
             #checking each coin whether its opponent's coin
-            if (player ==1 and board[i][j].startswith("B") and board[i][j]!="B_PAWN") or (player==2 and board[i][j].startswith("W") and board[i][j]!="W_PAWN"):
+            if (player ==1 and board[i][j].startswith("B") and board[i][j]!="B_P") or (player==2 and board[i][j].startswith("W") and board[i][j]!="W_P"):
                 #flag to pass inverse player value so getmoves function can calculate opponents moves
                 playerFlag=1
                 if player==1:
@@ -149,14 +149,14 @@ def getMoves(coin,x,y,player):
     moves=[]
     captures=[]
     # to calculate moves if selected coin is pawn
-    if coin=="PAWN":
+    if coin=="P":
         # checking whether it's player 1 or 2
         if player==1:
             # pawn can move 1 step forward so checking is it's empty
-            if x-1>=0 and board[x-1][y]=="X":
+            if x-1>=0 and board[x-1][y]==" ":
                 moves.append(numericPosToAlphanumericPos(8-x+1,y))
             # if it's the first move then pawn can move 2 step forward so checking if the path is clear
-            if x==6 and board[x-1][y]=='X' and board[x-2][y]=='X':
+            if x==6 and board[x-1][y]==' ' and board[x-2][y]==' ':
                 moves.append(numericPosToAlphanumericPos(8-x+2,y))
             # pawn can capture diagonally so checking is there a chance
             if x-1>=0 and y-1>=0 and board[x-1][y-1].startswith("B"):
@@ -165,17 +165,17 @@ def getMoves(coin,x,y,player):
                 moves.append(position)
                 captures.append((position,capturing_coin))            
             # pawn can capture diagonally so checking is there a chance
-            if x-1>=0 and y+1>=0 and board[x-1][y+1].startswith("B"):
+            if x-1>=0 and y+1<8 and board[x-1][y+1].startswith("B"):
                 position=numericPosToAlphanumericPos(8-x+1,y+1)
                 capturing_coin=board[x-1][y+1].split("_")[1]
                 moves.append(position)
                 captures.append((position,capturing_coin))                        
         else:
             # pawn can move 1 step forward so checking is it's empty
-            if x+1<8 and board[x+1][y]=="X":
+            if x+1<8 and board[x+1][y]==" ":
                 moves.append(numericPosToAlphanumericPos(8-x-1,y))
             # if it's the first move then pawn can move 2 step forward so checking if the path is clear
-            if x==1 and board[x+1][y]=='X' and board[x+2][y]=='X':
+            if x==1 and board[x+1][y]==' ' and board[x+2][y]==' ':
                 moves.append(numericPosToAlphanumericPos(8-x-2,y))
             # pawn can capture diagonally so checking is there a chance
             if x+1<8 and y-1>=0 and board[x+1][y-1].startswith("W"):
@@ -184,12 +184,12 @@ def getMoves(coin,x,y,player):
                 moves.append(position)
                 captures.append((position,capturing_coin))            
             # pawn can capture diagonally so checking is there a chance
-            if x+1<8 and y+1>=0 and board[x+1][y+1].startswith("W"):
+            if x+1<8 and y+1<8 and board[x+1][y+1].startswith("W"):
                 position=numericPosToAlphanumericPos(8-x-1,y+1)
                 capturing_coin=board[x+1][y+1].split("_")[1]
                 moves.append(position)
                 captures.append((position,capturing_coin))                        
-    if coin=="KNIGHT": # checking if the selected coin is knight
+    if coin=="N": # checking if the selected coin is knight
         # knight have unique moves which is stored in a list
         knight_possibilities=[(1,2),(2,1),(-1,2),(2,-1),(1,-2),(-2,1),(-1,-2),(-2,-1)]
         # iterating over each possibility
@@ -200,16 +200,16 @@ def getMoves(coin,x,y,player):
             # checking whether the move is possible
             if newX>=0 and newX<8 and newY>=0 and newY<8:
                 # checking whether the move is empty or obstruction
-                if board[newX][newY]=='X':
+                if board[newX][newY]==' ':
                     moves.append(numericPosToAlphanumericPos(8-newX,newY))
                 else:
                     #checking the obstruction is an opponent or same troop
                     calculateCaptures(player,moves,captures,newX,newY)
-    if coin=="ROOK" or coin=="QUEEN": # checking whether the selected coin is rook or queen since queen has the abilities of rook
+    if coin=="R" or coin=="Q": # checking whether the selected coin is rook or queen since queen has the abilities of rook
         # iterating vertically towards down
         for i in range(x+1,8):
             # checking whether the move is empty or obstruction
-            if board[i][y]=='X':
+            if board[i][y]==' ':
                 moves.append(numericPosToAlphanumericPos(8-i,y))
             else: 
                 #checking the obstruction is an opponent or same troop and stopping there
@@ -218,7 +218,7 @@ def getMoves(coin,x,y,player):
         # iterating vertically towards top
         for i in range(x-1,-1,-1):
             # checking whether the move is empty or obstruction
-            if board[i][y]=='X':
+            if board[i][y]==' ':
                 moves.append(numericPosToAlphanumericPos(8-i,y))
             else: 
                 #checking the obstruction is an opponent or same troop and stopping there
@@ -227,7 +227,7 @@ def getMoves(coin,x,y,player):
         # iterating horizontally towards right
         for i in range(y+1,8):
             # checking whether the move is empty or obstruction
-            if board[x][i]=='X':
+            if board[x][i]==' ':
                 moves.append(numericPosToAlphanumericPos(8-x,i))
             else: 
                 #checking the obstruction is an opponent or same troop and stopping there
@@ -236,13 +236,13 @@ def getMoves(coin,x,y,player):
         # iterating horizontally towards left
         for i in range(y-1,-1,-1):
             # checking whether the move is empty or obstruction
-            if board[x][i]=='X':
+            if board[x][i]==' ':
                 moves.append(numericPosToAlphanumericPos(8-x,i))
             else: 
                 #checking the obstruction is an opponent or same troop and stopping there
                 calculateCaptures(player,moves,captures,x,i)
                 break
-    if coin=="BISHOP" or coin=="QUEEN":  # checking whether the selected coin is bishop or queen since queen has the abilities of bishop
+    if coin=="B" or coin=="Q":  # checking whether the selected coin is bishop or queen since queen has the abilities of bishop
         # iterating diagonaly towards bottom-right
         for i in range(1,8):
             newX=x+i
@@ -250,7 +250,7 @@ def getMoves(coin,x,y,player):
             # checking if it's valid position
             if newX<8 and newX>=0 and newY<8 and newY>=0:
                 # checking whether the move is empty or obstruction
-                if board[newX][newY]=='X':
+                if board[newX][newY]==' ':
                     moves.append(numericPosToAlphanumericPos(8-newX,newY))
                 else: 
                     #checking the obstruction is an opponent or same troop and stopping there
@@ -263,7 +263,7 @@ def getMoves(coin,x,y,player):
             # checking if it's valid position
             if newX<8 and newX>=0 and newY<8 and newY>=0:
                 # checking whether the move is empty or obstruction
-                if board[newX][newY]=='X':
+                if board[newX][newY]==' ':
                     moves.append(numericPosToAlphanumericPos(8-newX,newY))
                 else: 
                     #checking the obstruction is an opponent or same troop and stopping there
@@ -276,7 +276,7 @@ def getMoves(coin,x,y,player):
             # checking if it's valid position
             if newX<8 and newX>=0 and newY<8 and newY>=0:
                 # checking whether the move is empty or obstruction
-                if board[newX][newY]=='X':
+                if board[newX][newY]==' ':
                     moves.append(numericPosToAlphanumericPos(8-newX,newY))
                 else: 
                     #checking the obstruction is an opponent or same troop and stopping there
@@ -289,13 +289,13 @@ def getMoves(coin,x,y,player):
             # checking if it's valid position
             if newX<8 and newX>=0 and newY<8 and newY>=0:
                 # checking whether the move is empty or obstruction
-                if board[newX][newY]=='X':
+                if board[newX][newY]==' ':
                     moves.append(numericPosToAlphanumericPos(8-newX,newY))
                 else: 
                     #checking the obstruction is an opponent or same troop and stopping there
                     calculateCaptures(player,moves,captures,newX,newY)
                     break
-    if coin=="KING": # checking whether the selected coin is a king
+    if coin=="K": # checking whether the selected coin is a king
         # king has ability to move on eight direction one step, that is stored in list
         king_possibilities=[(-1,-1),(0,-1),(1,-1),(-1,0),(1,0),(-1,1),(0,1),(1,1)]
         # iterating over each possibility
@@ -306,7 +306,7 @@ def getMoves(coin,x,y,player):
             # checking whether it's a valid move
             if newX>=0 and newX<8 and newY>=0 and newY<8:
                 # checking whether the move is empty or obstruction
-                if board[newX][newY]=='X':
+                if board[newX][newY]==' ':
                     moves.append(numericPosToAlphanumericPos(8-newX,newY))
                 else:
                     #checking the obstruction is an opponent or same troop
@@ -326,35 +326,37 @@ def moveCoin(currentPosition,newPosition):
     # defining string for writing history
     string="White " if coinAtSource.startswith("W") else "Black "
     # checking whether move is a empty or capture
-    if coinAtDestination=='X':
+    if coinAtDestination==' ':
         #if empty then writing as coin moved
-        string+=coinAtSource.split("_")[1] + " at "+currentPosition+" has been moved to "+newPosition+"\n"
+        string+=coinDict[coinAtSource.split("_")[1]] + " at "+currentPosition+" has been moved to "+newPosition+"\n"
     else:
         #if capture then writing as coin captured
-        string+= coinAtSource.split("_")[1] + " at "+currentPosition+" has captured "+coinAtDestination.split("_")[1]+" at "+newPosition+"\n"
+        string+= coinDict[coinAtSource.split("_")[1]] + " at "+currentPosition+" has captured "+coinDict[coinAtDestination.split("_")[1]]+" at "+newPosition+"\n"
     #to write the calculated string in file
     file.write(string)
     print(string)
     #moving coin to the new position
     board[newX][newY]=board[curX][curY]
     #making current position as empty
-    board[curX][curY]="X"
+    board[curX][curY]=" "
 
 # Defined default board structure in a 2d array
 board = [
-    ["B_ROOK", "B_KNIGHT", "B_BISHOP", "B_QUEEN", "B_KING", "B_BISHOP", "B_KNIGHT", "B_ROOK"],
-    ["B_PAWN", "B_PAWN", "B_PAWN", "B_PAWN", "B_PAWN", "B_PAWN", "B_PAWN", "B_PAWN"],
-    ["X", "X", "X", "X", "X", "X", "X", "X"],
-    ["X", "X", "X", "X", "X", "X", "X", "X"],
-    ["X", "X", "X", "X", "X", "X", "X", "X"],
-    ["X", "X", "X", "X", "X", "X", "X", "X"],
-    ["W_PAWN", "W_PAWN", "W_PAWN", "W_PAWN", "W_PAWN", "W_PAWN", "W_PAWN", "W_PAWN"],
-    ["W_ROOK", "W_KNIGHT", "W_BISHOP", "W_QUEEN", "W_KING", "W_BISHOP", "W_KNIGHT", "W_ROOK"]
+    ["B_R", "B_N", "B_B", "B_Q", "B_K", "B_B", "B_N", "B_R"],
+    ["B_P", "B_P", "B_P", "B_P", "B_P", "B_P", "B_P", "B_P"],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    ["W_P", "W_P", "W_P", "W_P", "W_P", "W_P", "W_P", "W_P"],
+    ["W_R", "W_N", "W_B", "W_Q", "W_K", "W_B", "W_N", "W_R"]
 ]
 # row headers
 rows = [8, 7, 6, 5, 4, 3, 2, 1]
 # column headers
 columns = ["a", "b", "c", "d", "e", "f", "g", "h"]
+# key value pair to identify coin
+coinDict={"P":"PAWN","R":"ROOK","N":"KNIGHT","B":"BISHOP","Q":"QUEEN","K":"KING"}
 # printing board when starting the game
 print_board()
 
@@ -375,7 +377,7 @@ while True:
     # if player entered valid alphanumeric position then fetching coin at that position
     coin=getCoin(currentPosition)
     # letting player know which coin he has selected
-    print("The Coin You have selected is - "+ coin.split("_")[1])
+    print("The Coin You have selected is - "+ coinDict[coin.split("_")[1]])
     (x,y)=alphaNumericPosToNumericPos(currentPosition)
     # calculating moves and captures which can make
     (moves,captures)=getMoves(coin.split("_")[1],x,y,player)
