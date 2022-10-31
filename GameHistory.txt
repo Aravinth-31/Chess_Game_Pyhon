@@ -1,4 +1,9 @@
-White PAWN at b2 has been moved to b3
-Black QUEEN at a4 has captured PAWN at b3
-White PAWN at c2 has captured QUEEN at b3
+White PAWN at e2 has been moved to e4
+Black PAWN at d7 has been moved to d5
+White PAWN at e4 has captured PAWN at d5
+Black QUEEN at d8 has captured PAWN at d5
+White QUEEN at d1 has been moved to h5
+Black QUEEN at d5 has captured QUEEN at h5
+White KING at e1 has been moved to d1
+Black QUEEN at h5 has captured KING at d1
 Game Ended
