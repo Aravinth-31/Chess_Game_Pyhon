@@ -1,0 +1,4 @@
+White PAWN at b2 has been moved to b3
+Black QUEEN at a4 has captured PAWN at b3
+White PAWN at c2 has captured QUEEN at b3
+Game Ended
